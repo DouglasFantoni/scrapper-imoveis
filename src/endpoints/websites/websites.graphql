@@ -1,0 +1,21 @@
+
+
+type Website {
+    id: ID
+    name: String!
+    baseUrl: String!
+    slug: String!
+    isActive: Boolean!
+    pages: [Page]
+    imoveis: [Imovel]
+}
+
+input NewWebsite {
+    name: String!
+    baseUrl: String!
+    slug: String!
+    isActive: Boolean
+    pages: [NewPage]
+}
+
+

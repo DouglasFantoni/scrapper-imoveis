@@ -1,0 +1,18 @@
+type Query {
+  posts: [Post!]!
+  post(id: ID!): Post
+  imoveis: [Imovel!]!
+  websites: [Imovel!]!
+}
+
+type Mutation {
+  createWebsite(website: NewWebsite): Website
+
+  createPost(input: NewPost!): Post!
+  updatePost(input: UpdatePost!): Post
+  deletePost(id: ID!): Post
+}
+
+type Subscription {
+  postCreated: Post
+}

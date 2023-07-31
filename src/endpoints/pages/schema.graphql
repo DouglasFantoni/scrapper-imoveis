@@ -1,0 +1,14 @@
+
+
+type Page {
+    id:         ID
+    name:       String
+    website :   Website
+    websiteId:  String
+}
+
+input NewPage {
+    id:         ID
+    name:       String
+    websiteId:  String
+}

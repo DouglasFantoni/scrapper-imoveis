@@ -1,0 +1,53 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+  // url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Post {
+  id          String  @id @default(uuid())
+  title       String
+  text        String
+  isPublished Boolean @default(false)
+}
+
+model Imovel {
+  id          String  @id @default(uuid())
+  name        String
+  slug        String
+  title       String
+  description String
+  amount      Float // Valor do imovel
+  url         String  // Link do imovel
+  type        String? // Tipo do imovelTerreno, apartamento, casa
+  image       String? // Imagem do imovel
+  size        String? // Tamanho em metros quadrados
+  status      String? // Status atual do imovel (extrajudicial, etc)
+
+  website    Website @relation(fields: [websiteId], references: [id])
+  websiteId  String
+}
+
+model Website {
+  id         String  @id @default(uuid())
+  name       String
+  baseUrl    String
+  slug       String
+  isActive    Boolean
+  pages      Page[]
+  imoveis    Imovel[]
+}
+
+model Page {
+  id         String  @id @default(uuid())
+  name       String
+  website    Website @relation(fields: [websiteId],references: [id])
+  websiteId  String
+}

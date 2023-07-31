@@ -1,0 +1,22 @@
+
+type Imovel {
+    id: ID
+    slug: String!
+    title: String!
+    amount: Float!
+    url: String!
+    description: String
+    type: String
+    image: String
+    size: String
+    status: String
+    website: Website
+    websiteId: String
+}
+
+
+
+
+#type Query {
+##    imovel(id: ID!): Post
+#}
