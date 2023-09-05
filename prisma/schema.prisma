@@ -20,19 +20,18 @@ model Post {
 
 model Imovel {
   id          String  @id @default(uuid())
-  name        String
-  slug        String
   title       String
+  slug        String
+  url         String  // Link do imovel
   description String
   amount      Float // Valor do imovel
-  url         String  // Link do imovel
+  websiteId  String
+  website    Website @relation(fields: [websiteId], references: [id])
+
   type        String? // Tipo do imovelTerreno, apartamento, casa
   image       String? // Imagem do imovel
   size        String? // Tamanho em metros quadrados
   status      String? // Status atual do imovel (extrajudicial, etc)
-
-  website    Website @relation(fields: [websiteId], references: [id])
-  websiteId  String
 }
 
 model Website {
@@ -40,14 +39,14 @@ model Website {
   name       String
   baseUrl    String
   slug       String
-  isActive    Boolean
+  isActive   Boolean @default(true)
   pages      Page[]
   imoveis    Imovel[]
 }
 
 model Page {
   id         String  @id @default(uuid())
-  name       String
+  relativeUrl       String
   website    Website @relation(fields: [websiteId],references: [id])
   websiteId  String
 }

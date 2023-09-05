@@ -1,18 +1,27 @@
 type Query {
-  posts: [Post!]!
-  post(id: ID!): Post
-  imoveis: [Imovel!]!
-  websites: [Imovel!]!
+	posts: [Post!]!
+	post(id: ID!): Post
+	imoveis: [Imovel!]!
+	websites: [Website!]!
+	pages: [Page!]!
+	find: String
+	removeAll: String
+	removeAllImoveis: String
 }
 
 type Mutation {
-  createWebsite(website: NewWebsite): Website
+	createWebsite(website: NewWebsite!): Website!
+	createImovel(imovel: NewImovel!): Imovel!
+	createPage(page: NewPage!): Page!
 
-  createPost(input: NewPost!): Post!
-  updatePost(input: UpdatePost!): Post
-  deletePost(id: ID!): Post
+	createPost(input: NewPost!): Post!
+	updatePost(input: UpdatePost!): Post
+	deletePost(id: ID!): Post
 }
 
 type Subscription {
-  postCreated: Post
+	postCreated: Post
+	websiteCreated: Website
+	pageCreated: Page
+	imovelCreated: Imovel
 }

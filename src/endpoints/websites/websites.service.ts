@@ -1,8 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import { PrismaService } from "../../prisma/prisma.service";
-import { WEBSITES_MAPEADOS } from "../../constants/WebsitesMapeados";
-import { MAX_VALUE } from "../../constants/filters";
 import { Imovel, NewWebsite, Page, Website } from "../../graphql.schema";
+import { PrismaService } from "../../prisma/prisma.service";
 
 
 @Injectable()
@@ -14,19 +12,34 @@ export class WebsitesService {
     const data =  this.prisma.website.create({
       data: {
         ...website,
-        pages: {
+        pages:  {
           create: website.pages
         }
+        // pages: website.pages.map(page => {
+
+        //   return this.prisma.page.create({
+
+        //   })
+        // }),
       },
+      include: {
+        pages: true,
+        imoveis: true
+      }
       // skipDuplicates: true,
     })
 
     return data;
   }
 
-  async getAll(): Promise<Website[]> {
+  async getAll(): Promise<(Website & { imoveis: Imovel[]; pages: Page[]; })[]> {
 
-    return this.prisma.website.findMany()
+    return this.prisma.website.findMany({
+      include: {
+        pages: true,
+        imoveis: true
+      }
+    })
   }
 
 

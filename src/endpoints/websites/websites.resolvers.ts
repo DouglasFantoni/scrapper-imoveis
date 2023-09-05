@@ -1,7 +1,7 @@
-import { Args, Mutation, Query, Resolver, Subscription } from "@nestjs/graphql";
+import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 import { PubSub } from "graphql-subscriptions";
+import { Imovel, Page, Website } from "../../graphql.schema";
 import { WebsitesService } from "./websites.service";
-import { Page, Website } from "../../graphql.schema";
 
 const pubSub = new PubSub();
 
@@ -11,7 +11,7 @@ export class WebsitesResolvers {
   constructor(private readonly websitesService: WebsitesService) {}
 
   @Query('websites')
-  async getAll(): Promise<Website[]>{
+  async getAll(): Promise<(Website & { imoveis: Imovel[]; pages: Page[]; })[]>{
     return this.websitesService.getAll();
   }
 

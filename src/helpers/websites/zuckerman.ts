@@ -1,17 +1,17 @@
 import axios from "axios";
 import cheerio from "cheerio";
-import {formataDinheiro} from "../number";
-import {encrypt, getUniqueId} from "../crypt";
-import { Imovel, Website } from "../../graphql.schema";
+import { ImovelDataDto } from '../../endpoints/imoveis/ImovelDataDto';
+import { Website } from "../../graphql.schema";
+import { encrypt } from "../crypt";
 
 
-export const zuckerman =  (websiteData: Website, pagina: string) => {
+export const zuckerman = async (websiteData: Website, pagina: string) => {
 
-    const imoveisData: Imovel[] = [];
+    const imoveisData: ImovelDataDto[] = [];
 
     const url = `${websiteData.baseUrl}${pagina}`;
 
-    return  axios.get(url).then(response => {
+    return await axios.get(url).then(response => {
 
         const $ = cheerio.load(response.data);
         // console.log(response.data)
@@ -29,11 +29,12 @@ export const zuckerman =  (websiteData: Website, pagina: string) => {
 
             console.log('amount',amount)
 
-            const imovelData: Imovel = {
+            const imovelData: ImovelDataDto = {
                 slug:  encrypt(`${url}`),
                 title,
                 amount: parseFloat(amount),
                 status,
+                description: '  ',
                 image,
                 size,
                 url
@@ -46,5 +47,7 @@ export const zuckerman =  (websiteData: Website, pagina: string) => {
     }).catch(err => {
         console.log('url',url)
         console.log(err)
+        return [];
+
     });
 }

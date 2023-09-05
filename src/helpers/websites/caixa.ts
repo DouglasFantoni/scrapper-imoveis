@@ -1,14 +1,15 @@
 import axios from "axios";
 import cheerio from "cheerio";
-import {formataDinheiro, getNumbers} from "../number";
-import * as querystring from "querystring";
 import * as https from "https";
-import {encrypt, getUniqueId} from "../crypt";
-import { Imovel, Website } from "../../graphql.schema";
+import * as querystring from "querystring";
+import { ImovelDataDto } from '../../endpoints/imoveis/ImovelDataDto';
+import { Website } from "../../graphql.schema";
+import { encrypt } from "../crypt";
+import { getNumbers } from "../number";
 
-export const caixa =  (websiteData: Website, pagina: string) => {
+export const caixa = async (websiteData: Website, pagina: string) => {
 
-    const imoveisData: Imovel[] = [];
+    const imoveisData: ImovelDataDto[] = [];
 
     const url = `${websiteData.baseUrl}${pagina}`;
 
@@ -31,7 +32,7 @@ export const caixa =  (websiteData: Website, pagina: string) => {
         rejectUnauthorized: false,
     });
 
-    return  axios.post(url, params, {
+    return await axios.post(url, params, {
         headers: { 'content-type': 'application/x-www-form-urlencoded',
 
         },
@@ -78,7 +79,7 @@ export const caixa =  (websiteData: Website, pagina: string) => {
                 const description =  $(this).find('.form-row.clearfix > .control-item font').text();
                 const url = `${websiteData.baseUrl}`;
 
-                const imovelData: Imovel = {
+                const imovelData: ImovelDataDto = {
                     slug:  encrypt(`${slug}`),
                     image: websiteData.baseUrl+image,
                     description,
@@ -98,5 +99,7 @@ export const caixa =  (websiteData: Website, pagina: string) => {
     }).catch(err => {
         console.log('url',url)
         console.log(err)
+        return [];
+
     });
 }

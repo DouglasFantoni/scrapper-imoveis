@@ -1,16 +1,16 @@
 import axios from "axios";
 import cheerio from "cheerio";
-import {formataDinheiro} from "../number";
-import {encrypt, getUniqueId} from "../crypt";
-import { Imovel, Website } from "../../graphql.schema";
+import { ImovelDataDto } from '../../endpoints/imoveis/ImovelDataDto';
+import { Website } from "../../graphql.schema";
+import { encrypt } from "../crypt";
 
-export const leilaoimovel =  (websiteData: Website, pagina: string) => {
+export  const leilaoimovel = async (websiteData: Website, pagina: string) => {
 
-    const imoveisData: Imovel[] = [];
+    const imoveisData: ImovelDataDto[] = [];
 
     const url = `${websiteData.baseUrl}${pagina}`;
 
-    return  axios.get(url).then(response => {
+    return await axios.get(url).then(response => {
 
         const $ = cheerio.load(response.data);
         // console.log(response.data)
@@ -24,11 +24,15 @@ export const leilaoimovel =  (websiteData: Website, pagina: string) => {
             const url = `${websiteData.baseUrl}${$(this).find('.Link_Redirecter').attr('href')}`;
             const image = `${$(this).find('.Link_Redirecter > picture > img').attr('src')}`;
 
-            const imovelData: Imovel = {
+            const imovelData: ImovelDataDto = {
                 slug:  encrypt(`${url}`),
                 title,
                 amount: parseFloat(amount),
                 status,
+          
+                description: '  ',
+                
+
                 image,
                 url
             }
@@ -40,7 +44,9 @@ export const leilaoimovel =  (websiteData: Website, pagina: string) => {
     }).catch(err => {
         console.log('url',url)
         console.log(err)
+        return [];
     });
+
 }
 
 

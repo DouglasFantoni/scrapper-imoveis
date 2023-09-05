@@ -8,10 +8,26 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export class NewImovel {
+    title: string;
+    slug: string;
+    url: string;
+    description: string;
+    amount: number;
+    websiteId: string;
+    type?: Nullable<string>;
+    image?: Nullable<string>;
+    size?: Nullable<string>;
+    status?: Nullable<string>;
+}
+
 export class NewPage {
-    id?: Nullable<string>;
-    name?: Nullable<string>;
-    websiteId?: Nullable<string>;
+    relativeUrl: string;
+    websiteId: string;
+}
+
+export class NewWebsitePage {
+    relativeUrl: string;
 }
 
 export class NewPost {
@@ -30,30 +46,28 @@ export class NewWebsite {
     name: string;
     baseUrl: string;
     slug: string;
-    isActive?: Nullable<boolean>;
-    pages?: Nullable<Nullable<NewPage>[]>;
+    isActive: boolean;
+    pages: NewWebsitePage[];
 }
 
 export class Imovel {
-    id?: Nullable<string>;
-    slug: string;
+    id: string;
     title: string;
-    amount: number;
+    slug: string;
     url: string;
-    description?: Nullable<string>;
+    description: string;
+    amount: number;
+    websiteId: string;
     type?: Nullable<string>;
     image?: Nullable<string>;
     size?: Nullable<string>;
     status?: Nullable<string>;
-    website?: Nullable<Website>;
-    websiteId?: Nullable<string>;
 }
 
 export class Page {
-    id?: Nullable<string>;
-    name?: Nullable<string>;
-    website?: Nullable<Website>;
-    websiteId?: Nullable<string>;
+    id: string;
+    relativeUrl: string;
+    websiteId: string;
 }
 
 export class Post {
@@ -70,11 +84,23 @@ export abstract class IQuery {
 
     abstract imoveis(): Imovel[] | Promise<Imovel[]>;
 
-    abstract websites(): Imovel[] | Promise<Imovel[]>;
+    abstract websites(): Website[] | Promise<Website[]>;
+
+    abstract pages(): Page[] | Promise<Page[]>;
+
+    abstract find(): Nullable<string> | Promise<Nullable<string>>;
+
+    abstract removeAll(): Nullable<string> | Promise<Nullable<string>>;
+
+    abstract removeAllImoveis(): Nullable<string> | Promise<Nullable<string>>;
 }
 
 export abstract class IMutation {
-    abstract createWebsite(website?: Nullable<NewWebsite>): Nullable<Website> | Promise<Nullable<Website>>;
+    abstract createWebsite(website: NewWebsite): Website | Promise<Website>;
+
+    abstract createImovel(imovel: NewImovel): Imovel | Promise<Imovel>;
+
+    abstract createPage(page: NewPage): Page | Promise<Page>;
 
     abstract createPost(input: NewPost): Post | Promise<Post>;
 
@@ -85,16 +111,22 @@ export abstract class IMutation {
 
 export abstract class ISubscription {
     abstract postCreated(): Nullable<Post> | Promise<Nullable<Post>>;
+
+    abstract websiteCreated(): Nullable<Website> | Promise<Nullable<Website>>;
+
+    abstract pageCreated(): Nullable<Page> | Promise<Nullable<Page>>;
+
+    abstract imovelCreated(): Nullable<Imovel> | Promise<Nullable<Imovel>>;
 }
 
 export class Website {
-    id?: Nullable<string>;
+    id: string;
     name: string;
     baseUrl: string;
     slug: string;
     isActive: boolean;
-    pages?: Nullable<Nullable<Page>[]>;
-    imoveis?: Nullable<Nullable<Imovel>[]>;
+    pages: Page[];
+    imoveis: Imovel[];
 }
 
 type Nullable<T> = T | null;

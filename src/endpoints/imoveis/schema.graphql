@@ -1,19 +1,32 @@
 
 type Imovel {
-    id: ID
-    slug: String!
-    title: String!
-    amount: Float!
-    url: String!
-    description: String
-    type: String
-    image: String
-    size: String
-    status: String
-    website: Website
-    websiteId: String
+	id: ID!
+	title: String!
+	slug: String!
+	url: String!
+	description: String!
+	amount: Float!
+	websiteId: String!
+
+	type: String
+	image: String
+	size: String
+	status: String
 }
 
+input NewImovel {
+	title: String!
+	slug: String!
+	url: String!
+	description: String!
+	amount: Float!
+	websiteId: String!
+
+	type: String
+	image: String
+	size: String
+	status: String
+}
 
 
 

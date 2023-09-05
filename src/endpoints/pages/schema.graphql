@@ -1,14 +1,16 @@
 
 
 type Page {
-    id:         ID
-    name:       String
-    website :   Website
-    websiteId:  String
+	id: ID!
+	relativeUrl: String!
+	websiteId: String!
 }
 
 input NewPage {
-    id:         ID
-    name:       String
-    websiteId:  String
+	relativeUrl: String!
+	websiteId: String!
+}
+
+input NewWebsitePage {
+	relativeUrl: String!
 }
