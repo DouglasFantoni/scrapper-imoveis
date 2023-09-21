@@ -1,0 +1,46 @@
+[
+	{
+		"name": "Lance Judicial",
+		"baseUrl": "https://www.lancejudicial.com.br",
+		"slug": "lance-judicial",
+		"isActive": true,
+		"pages": [
+			{
+				"relativeUrl": "/imoveis/sp/sao-jose-dos-campos?&value_max=5000000"
+			}
+		]
+	},
+	{
+		"name": "Zuckerman",
+		"baseUrl": "https://www.zukerman.com.br",
+		"slug": "zuckerman",
+		"isActive": true,
+		"pages": [
+			{
+				"relativeUrl": "/leilao-de-imoveis/sp/interior/sao-jose-dos-campos"
+			}
+		]
+	},
+	{
+		"name": "Leilão Imovel",
+		"baseUrl": "https://www.leilaoimovel.com.br",
+		"slug": "leilao-imovel",
+		"isActive": true,
+		"pages": [
+			{
+				"relativeUrl": "/encontre-seu-imovel?s=&cidade=3549904&desocupado=&preco_max=200000"
+			}
+		]
+	},
+	{
+		"name": "Caixa Economica Federal",
+		"baseUrl": "https://venda-imoveis.caixa.gov.br",
+		"slug": "caixa",
+		"isActive": true,
+		"pages": [
+			{
+				"relativeUrl": "/sistema/carregaPesquisaImoveis.asp"
+			}
+		]
+	}
+]

@@ -2,13 +2,17 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
-  // url      = env("DATABASE_URL")
+
+  // Usado para desenvolvimento local
+  // provider = "sqlite"
+  // Usado para desenvolvimento em produção
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]
 }
 
 model Post {

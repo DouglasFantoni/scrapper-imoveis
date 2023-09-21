@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+
+Resources:
+  MyDBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: "Subnet group for my RDS"
+      SubnetIds:
+        - subnet-0ce68677dd0405115
+        - subnet-023fb22588d6cee96
+
+  MyDB:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      Engine: mariadb
+      DBInstanceClass: db.t2.micro
+      DBSubnetGroupName: !Ref MyDBSubnetGroup
+      AllocatedStorage: 5
+      MasterUsername: affinitycode
+      MasterUserPassword: fkjp8972
+      BackupRetentionPeriod: 0
+      MultiAZ: false
+      PubliclyAccessible: false
+      StorageType: gp2
+
+

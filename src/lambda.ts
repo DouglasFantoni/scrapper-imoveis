@@ -25,7 +25,7 @@ async function bootstrap() {
 	return cachedServer;
 }
 
-export const handler = async (event: any, context: Context, callback: any) => {
+const handler = async (event: any, context: Context, callback: any) => {
 	const server = await bootstrap();
 
 	if (event.source === "serverless-plugin-warmup") {
@@ -36,4 +36,4 @@ export const handler = async (event: any, context: Context, callback: any) => {
 	return server(event, context, callback);
 };
 
-// export default handler;
+export default handler;

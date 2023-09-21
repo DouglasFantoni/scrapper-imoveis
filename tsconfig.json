@@ -1,18 +1,102 @@
 {
-  "compilerOptions": {
+	"compilerOptions": {
 		"module": "commonjs",
-		"declaration": true,
+		// "declaration": true,
+		"noImplicitAny": false,
 		"removeComments": true,
+		"noLib": false,
+		"strictNullChecks": false,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"moduleResolution": "node",
+
+		"allowSyntheticDefaultImports": true,
 		"emitDecoratorMetadata": true,
 		"experimentalDecorators": true,
-		"allowSyntheticDefaultImports": true,
-		"target": "es2017",
+		// "noUnusedLocals": true,
+		// "noUnusedParameters": true,
+		"target": "es2019",
 		"sourceMap": true,
 		"outDir": "./dist",
-		"esModuleInterop": true,
+		"rootDir": "./src",
 		"baseUrl": "./",
-		"incremental": true,
-		"skipLibCheck": true
+		"lib": ["es2019"]
+		// "typeRoots": ["./node_modules/@types", "./src/types"]
+		// "types": ["./node_modules/@nestjs/graphql", "./node_modules/node"]
+		// "lib": ["ESNext", "DOM"]
 	},
-  "include": ["src/**/*"]
+	"include": ["src/**/*.ts"],
+	"exclude": ["node_modules"]
 }
+
+// {
+//   "compilerOptions": {
+//     "allowSyntheticDefaultImports": true,
+//     "emitDecoratorMetadata": true,
+//     "experimentalDecorators": true,
+//     "module": "commonjs",
+//     "lib": ["ESNext", "DOM"],
+//     "declaration": true,
+//     "outDir": "dist",
+//     "rootDir": "./",
+//     "strict": false,
+//     "strictNullChecks": false,
+//     "sourceMap": true,
+//     "moduleResolution": "node",
+//     "pretty": true,
+//     "skipLibCheck": true,
+//     "target": "ES2019",
+//     "esModuleInterop": true
+//   },
+//   "include": ["src/**/*", "types/**/*"],
+//   "exclude": [
+//     "node_modules",
+//     "dist"
+//   ]
+// }
+
+// {
+//   "compilerOptions": {
+//     "module": "commonjs",
+//     // "declaration": true,
+//     "removeComments": true,
+//     "emitDecoratorMetadata": true,
+//     "experimentalDecorators": true,
+//     "allowSyntheticDefaultImports": true,
+//     // "target": "es2017",
+//     "sourceMap": true,
+//     "outDir": "./dist",
+//     "baseUrl": "./",
+//     "skipLibCheck": true,
+//     "esModuleInterop": true,
+//     "allowJs": true,
+//     "preserveConstEnums": true,
+//     // "strictNullChecks": true,
+//     "target": "es2017",
+//     // "outDir": ".build",
+//     "moduleResolution": "node",
+//     "lib": ["es2015"],
+//     "rootDir": "./"
+//   },
+// }
+
+// {
+//   "compilerOptions": {
+//     "module": "commonjs",
+//     // "declaration": true,
+//     "noImplicitAny": false,
+//     "removeComments": true,
+//     "noLib": false,
+//     "allowSyntheticDefaultImports": true,
+//     "emitDecoratorMetadata": true,
+//     "experimentalDecorators": true,
+//     "target": "es2017",
+//     "sourceMap": true,
+//     "outDir": "./dist",
+//     "baseUrl": "./",
+//     "lib": ["es2018"]
+//   },
+//   "exclude": ["node_modules"]
+
+
+// }

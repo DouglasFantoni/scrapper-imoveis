@@ -1,13 +1,16 @@
 
 const formatador = new Intl.NumberFormat('pt-BR',
-    { style: 'currency', currency: 'BRL'}
+{
+    style: 'currency',
+    currency: 'BRL',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+}
 );
 
-export const formataDinheiro = (valor: string) => {
+export const formataDinheiro = (valor: number) => {
 
-    const value = (valor.slice(0,valor.length-2) as unknown as number)
-
-    return formatador.format(value)
+    return formatador.format(valor)
 }
 
 export function getNumbers(string: string)

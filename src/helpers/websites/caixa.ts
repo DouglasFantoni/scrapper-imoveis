@@ -4,8 +4,8 @@ import * as https from "https";
 import * as querystring from "querystring";
 import { ImovelDataDto } from '../../endpoints/imoveis/ImovelDataDto';
 import { Website } from "../../graphql.schema";
-import { encrypt } from "../crypt";
-import { getNumbers } from "../number";
+import { convertImovelType, convertToNumber } from '../convertionsToTypes';
+import { stripHtmlTags } from "../text";
 
 export const caixa = async (websiteData: Website, pagina: string) => {
 
@@ -72,22 +72,25 @@ export const caixa = async (websiteData: Website, pagina: string) => {
 
             imoveisList.each(function()  {
 
-                const title = $(this).find('span>strong>font').text();
+                const title = $(this).find('span > strong > font').text();
+        
                 const slug = $(this).find('span>a').attr('onclick');
-                const amount = getNumbers(title);
                 const image =  $(this).find('div.fotoimovel-col1 > img').attr('src');
                 const description =  $(this).find('.form-row.clearfix > .control-item font').text();
                 const url = `${websiteData.baseUrl}`;
+                const fullImovelUrl = `${websiteData.baseUrl}${slug}`;
+                const amount = convertToNumber(title) || convertToNumber(description)
+                const isInDisput = $(this).find('span > strong > span > b').text();
 
                 const imovelData: ImovelDataDto = {
-                    slug:  encrypt(`${slug}`),
-                    image: websiteData.baseUrl+image,
-                    description,
-                    title,
-                    amount: parseFloat(`${amount}`),
+                    slug: fullImovelUrl,
+                    image: `${websiteData.baseUrl}${image}`,
+                    description: stripHtmlTags(description),
+                    title: isInDisput.length ?  `${isInDisput} - ${title}` : title,
+                    type: convertImovelType(description),
+                    amount,
                     url
                 }
-                console.log('imovelData',imovelData)
                 imoveisData.push(imovelData)
 
             });

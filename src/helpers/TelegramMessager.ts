@@ -14,9 +14,7 @@ export default class TelegramMessager {
 
     public async sendMessage(sendMessage: string) {
 
-        return this.bot.sendMessage(Vars.TELEGRAM_BOT_CHATID, sendMessage,{parse_mode: 'HTML'}).catch((error: any) => {
-            console.log("ERRO NO BOT TELEGRAM",error)
-        })
+        return this.bot.sendMessage(Vars.TELEGRAM_BOT_CHATID, sendMessage,{parse_mode: 'HTML'})
 
         
     }

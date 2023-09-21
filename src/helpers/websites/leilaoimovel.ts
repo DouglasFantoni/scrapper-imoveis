@@ -2,7 +2,7 @@ import axios from "axios";
 import cheerio from "cheerio";
 import { ImovelDataDto } from '../../endpoints/imoveis/ImovelDataDto';
 import { Website } from "../../graphql.schema";
-import { encrypt } from "../crypt";
+import { convertImovelType, convertToNumber } from '../convertionsToTypes';
 
 export  const leilaoimovel = async (websiteData: Website, pagina: string) => {
 
@@ -18,26 +18,38 @@ export  const leilaoimovel = async (websiteData: Website, pagina: string) => {
         const imoveis = $(".place-box");
 
         imoveis.each(function()  {
-            const title = `${$(this).find('b').text()}`
-            const amount = $(this).find('.discount-price').text().replace(/[^0-9]/g,'');
-            const status = ($(this).find('.categories a').text().toLowerCase()) ;
-            const url = `${websiteData.baseUrl}${$(this).find('.Link_Redirecter').attr('href')}`;
-            const image = `${$(this).find('.Link_Redirecter > picture > img').attr('src')}`;
+                try {
+                    const title = `${$(this).find('.address > p > b').text()}`
+                    const description = `${$(this).find('.address > p > span').text()}`
+                    const amount = $(this).find('.discount-price').text();
+                    const status = ($(this).find('.categories a').text().toLowerCase()) ;
+                    const url = `${websiteData.baseUrl}${$(this).find('.Link_Redirecter').attr('href')}`;
+                    const image = `${$(this).find('.Link_Redirecter > picture > img').attr('src')}`;
+        
+                    // As vezes existe um texto a consultar no valor
+                    const imovelValue =  convertToNumber(amount);
 
-            const imovelData: ImovelDataDto = {
-                slug:  encrypt(`${url}`),
-                title,
-                amount: parseFloat(amount),
-                status,
-          
-                description: '  ',
-                
+                    if (imovelValue){
+                        const imovelData: ImovelDataDto = {
+                            slug: url,
+                            title,
+                            amount: imovelValue,
+                            status,
+                            description,
+                            image,
+                            type: convertImovelType(title),
+                            url
+                        }
+            
+                        imoveisData.push(imovelData)
+                    }
 
-                image,
-                url
-            }
-
-            imoveisData.push(imovelData)
+                } catch (error) {
+                    console.log('ERRO AO BUSCAR O IMOVEL.');
+                    console.log('WEBSITE:',websiteData);
+                    console.log('IMOVEL:', $(this));
+                    
+                }
         });
 
         return imoveisData.length > 0 ? imoveisData : [null];

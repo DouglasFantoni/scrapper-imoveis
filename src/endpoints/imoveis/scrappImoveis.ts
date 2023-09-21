@@ -26,7 +26,7 @@ const fetchFromSlug = async (slug: string, data: Website, url: string): Promise<
     switch (slug) {
         case "lance-judicial":
             return await lancejudicial(data, url);
-        case "leilaoimovel":
+        case "leilao-imovel":
             return await leilaoimovel(data, url);
         case "zuckerman":
             return await zuckerman(data, url) as ImovelDataDto[];

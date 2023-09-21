@@ -1,17 +1,14 @@
 import { Query, Resolver } from "@nestjs/graphql";
-import { PubSub } from "graphql-subscriptions";
-import { AdminService } from './admin.service';
+import { AdminService } from "./admin.service";
 
-const pubSub = new PubSub();
+// const pubSub = new PubSub();
 
-@Resolver('Imoveis')
+@Resolver("Imoveis")
 export class AdminResolvers {
+	constructor(private readonly adminService: AdminService) {}
 
-  constructor(private readonly adminService: AdminService) {}
-
-  @Query('removeAll')
-  async removeAll(): Promise<void>{
-    this.adminService.removeAll();
-  }
-
+	@Query("removeAll")
+	async removeAll(): Promise<void> {
+		this.adminService.removeAll();
+	}
 }

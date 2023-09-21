@@ -1,0 +1,46 @@
+service: scrapper-imoveis
+frameworkVersion: '3'
+
+plugins:
+  # - '@hewmen/serverless-plugin-typescript'  
+  # - serverless-jetpack
+  - serverless-offline
+
+
+package:
+  individually: true
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1 # or whatever your region is
+  stage: ${opt:stage, 'dev'}
+  memorySize: 128
+  vpc:
+    securityGroupIds:
+      - sg-0261a572de2d0458d
+    subnetIds:
+      - subnet-0ce68677dd0405115  
+
+functions:
+  api:
+    handler: dist/main.handler
+    events:
+      - http:
+          path: /
+          method: ANY
+          cors: true
+      - http:
+          path: /{proxy+}
+          method: ANY
+          cors: true
+          
+custom:
+  serverless-offline:
+    httpPort: 3000
+
+# custom:
+#   # Enable warmup on all functions (only for production and staging)
+#   warmup:      
+#       - production
+#       - staging

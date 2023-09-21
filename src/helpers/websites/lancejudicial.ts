@@ -2,6 +2,7 @@ import axios from "axios";
 import cheerio from "cheerio";
 import { ImovelDataDto } from '../../endpoints/imoveis/ImovelDataDto';
 import { Website } from "../../graphql.schema";
+import { convertImovelType, convertToNumber } from '../convertionsToTypes';
 
 export const lancejudicial = async (websiteData: Website, pagina: string): Promise<ImovelDataDto[]> => {
 
@@ -24,17 +25,20 @@ export const lancejudicial = async (websiteData: Website, pagina: string): Promi
                 const relativeUrl = `${$(this).find('.card-title').attr('href')}`;
                 const fullImovelUrl = `${websiteData.baseUrl}${relativeUrl}`;
 
-                const imovelData: ImovelDataDto = {
-                    slug: fullImovelUrl,
-                    title,
-                    amount: (parseFloat(amount)),
-                    image,
-                    description: '  ',
-                    status,
-                    url: fullImovelUrl,
-                };
+                const imovelConverted = convertImovelType(title);
 
-                imoveisData.push(imovelData);
+                    const imovelData: ImovelDataDto = {
+                        slug: fullImovelUrl,
+                        title,
+                        amount: convertToNumber(amount),
+                        image,
+                        type: imovelConverted,
+                        description: '  ',
+                        status,
+                        url: fullImovelUrl,
+                    };
+
+                    imoveisData.push(imovelData);
             });
         } catch (error) {
             console.log('ERRO AO PEGAR AS INFORMAÇÕES DO IMOVEL', error);

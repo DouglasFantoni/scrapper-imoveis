@@ -1,48 +1,52 @@
 import { Imovel } from "src/graphql.schema";
 import { formataDinheiro } from "./number";
 
-export const imovelText = (imovelData: Imovel) => {
-	// ${(parseFloat(imovelData.amount.slice(0, imovelData.amount.length -2))).toLocaleString('pt-BR', {
-	//         minimumFractionDigits: 2,
-	//         style: 'currency', currency: 'BRL'
-	//     }) }
+const imovelOptionalDataText = (imovelData: Imovel): string => {
 
-	const optionalData = () => {
 		let str = "";
 
 		imovelData.size &&
-			(str += `<b>Metragem: ${imovelData.size}</b>
+			(str += `<b>Metragem:</b> ${imovelData.size}
 `);
 		imovelData.type &&
-			(str += `<b>Tipo: ${imovelData.type}</b>
+			(str += `<b>Tipo:</b> ${imovelData.type}
 `);
 		imovelData.status &&
-			(str += `<b>Status: ${imovelData.status}</b>
+			(str += ` <b>Status:</b> ${imovelData.status}
 `);
 		imovelData.description &&
 			(str += `<b>${imovelData.description}</b>
 `);
 
-		return str.length
-			? `
-        ${str}
-        `
-			: "";
-	};
+		return str;
+}
 
-	return `
+export function stripHtmlTags(input: string): string {
+    return input.replace(/<\/?[^>]+(>|$)/g, "");
+}
 
-<span class="tg-spoiler">${imovelData.image}</span>
+export const imovelText = (imovelData: Imovel, websiteName: string): string | null => {
 
-<b>Nome: </b> ${imovelData.title.replace(
-		/[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/,
-		""
-	)}
+	try {
+		const text = `
 
-<b>Valor: </b> ${formataDinheiro(`${imovelData.amount }`)}
-${optionalData()}
-<b>Link:</b> ${imovelData.url}
-`;
+		<span class="tg-spoiler">${imovelData.image}</span>
+		<b>Site: </b>${websiteName}
+		<b>Nome: </b> ${imovelData.title.replace(
+				/[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/,
+				""
+			)}
+		<b>Valor: </b> ${formataDinheiro(imovelData.amount)}
+		${imovelOptionalDataText(imovelData)}
+		<b>Link:</b> ${imovelData.url}
+		`
+
+		return text;
+	} catch (error) {
+		console.log('ERRO EM text AO PEGAR O SEGUINTE IMOVEL: ',imovelData);
+		
+		return null;
+	}
 };
 
 export const imovelNotFoundText = (siteName: string) => {
