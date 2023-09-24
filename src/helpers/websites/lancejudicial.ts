@@ -55,7 +55,6 @@ export const lancejudicial = async (
 		} catch (error) {
 			console.log("ERRO AO PEGAR AS INFORMAÇÕES DO IMOVEL", error);
 		}
-		console.log("imoveisData", imoveisData.length > 0 ? imoveisData : [null]);
 		return imoveisData.length > 0 ? imoveisData : [];
 	} catch (err) {
 		console.log("url", url);

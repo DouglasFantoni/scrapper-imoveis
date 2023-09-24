@@ -1,10 +1,10 @@
 import axios from "axios";
-import cheerio from "cheerio";
+import { load } from "cheerio";
 import * as https from "https";
 import * as querystring from "querystring";
-import { ImovelDataDto } from '../../endpoints/imoveis/ImovelDataDto';
+import { ImovelDataDto } from "../../endpoints/imoveis/ImovelDataDto";
 import { Website } from "../../graphql.schema";
-import { convertImovelType, convertToNumber } from '../convertionsToTypes';
+import { convertImovelType, convertToNumber } from "../convertionsToTypes";
 import { encrypt } from "../crypt";
 import { stripHtmlTags } from "../text";
 
@@ -38,8 +38,8 @@ export const caixa = async (websiteData: Website, pagina: string) => {
 			httpsAgent,
 		})
 		.then(async (response) => {
-			const $ = cheerio.load(response.data);
-			console.log(response.data);
+			const $ = load(response.data);
+			// console.log(response.data);
 
 			const imoveis = $("input");
 
@@ -68,7 +68,7 @@ export const caixa = async (websiteData: Website, pagina: string) => {
 					}
 				)
 				.then((response) => {
-					const $ = cheerio.load(response.data);
+					const $ = load(response.data);
 
 					const imoveisList = $("li.group-block-item");
 

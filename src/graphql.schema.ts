@@ -64,6 +64,18 @@ export class Imovel {
     status?: Nullable<string>;
 }
 
+export class ImovelResponse {
+    title: string;
+    slug: string;
+    url: string;
+    description: string;
+    amount: number;
+    type?: Nullable<string>;
+    image?: Nullable<string>;
+    size?: Nullable<string>;
+    status?: Nullable<string>;
+}
+
 export class Page {
     id: string;
     relativeUrl: string;
@@ -88,7 +100,7 @@ export abstract class IQuery {
 
     abstract pages(): Page[] | Promise<Page[]>;
 
-    abstract find(): Nullable<string> | Promise<Nullable<string>>;
+    abstract find(): Nullable<ImovelResponse>[] | Promise<Nullable<ImovelResponse>[]>;
 
     abstract removeAll(): Nullable<string> | Promise<Nullable<string>>;
 

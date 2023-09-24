@@ -4,7 +4,7 @@ import TelegramMessager from "src/helpers/TelegramMessager";
 import { imovelText } from "src/helpers/text";
 import { MAX_RETRIES } from "../../constants/configs";
 import { PrismaService } from "../../prisma/prisma.service";
-import { Imovel, NewImovel } from "./../../graphql.schema";
+import { Imovel, ImovelResponse, NewImovel } from "./../../graphql.schema";
 import { ImovelDataDto } from "./ImovelDataDto";
 import { ImovelWithWebsite } from "./imoveis.resolvers";
 import { scrappImoveis } from "./scrappImoveis";
@@ -36,7 +36,7 @@ export class ImoveisService {
 		});
 	}
 
-	async searchImoveis(): Promise<ImovelDataDto[]> {
+	async searchImoveis(): Promise<ImovelResponse[]> {
 		const websites = await this.prisma.website.findMany({
 			where: {
 				isActive: true,
@@ -55,7 +55,7 @@ export class ImoveisService {
 
 		await Promise.all(
 			websites.map(async (website) => {
-				let delay = 1000; // Começando com meio segundo
+				let delay = 1000; // Começando com 1 segundo
 
 				const imoveisScrapped = await scrappImoveis({
 					...website,
@@ -130,12 +130,12 @@ export class ImoveisService {
 									break;
 								} catch (error) {
 									// if (error.message.contains('Too Many Requests') || error.response.statusMessage.contains('Too Many Requests')) {
+									console.log("MENSAGEM: ", error.response.body.description);
 									await new Promise((res) => setTimeout(res, delay));
-									delay *= 2; // Dobra o tempo de espera para a próxima retentativa
+									delay += 10000; // Aumenta em 10 segundos a espera retentativa
 									retryCount++;
 									// } else {
 									// console.log(error);
-									console.log("MENSAGEM: ", error.response.body.description);
 									// }
 								}
 							}

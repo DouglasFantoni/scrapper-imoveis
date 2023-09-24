@@ -2,8 +2,7 @@ import { Args, Mutation, Query, Resolver } from "@nestjs/graphql";
 // import { Imovel, Website } from "@prisma/client";
 import { Website } from "@prisma/client";
 import { PubSub } from "graphql-subscriptions";
-import { Imovel, NewImovel } from './../../graphql.schema';
-import { ImovelDataDto } from "./ImovelDataDto";
+import { Imovel, ImovelResponse, NewImovel } from "./../../graphql.schema";
 import { ImoveisService } from "./imoveis.service";
 
 const pubSub = new PubSub();
@@ -25,8 +24,12 @@ export class ImoveisResolvers {
 	}
 
 	@Query("find")
-	async searchImoveis(): Promise<ImovelDataDto[]> {
-		return this.imoveisService.searchImoveis();
+	async searchImoveis(): Promise<ImovelResponse[]> {
+		const imoveisData = await this.imoveisService.searchImoveis();
+
+		console.log("RESPOSTA ESPERADA", imoveisData);
+
+		return imoveisData;
 	}
 
 	@Mutation("createImovel")

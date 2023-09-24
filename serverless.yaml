@@ -25,6 +25,7 @@ provider:
 functions:
   api:
     handler: dist/main.handler
+    timeout: 120 # Tempo maximo de 2 minutos para a execução da função
     events:
       - http:
           path: /
