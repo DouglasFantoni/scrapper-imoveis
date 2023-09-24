@@ -34,7 +34,7 @@ export  const leilaoimovel = async (websiteData: Website, pagina: string) => {
 
                     if (imovelValue){
                         const imovelData: ImovelDataDto = {
-													slug: slug,
+													slug,
 													title,
 													amount: imovelValue,
 													status,
