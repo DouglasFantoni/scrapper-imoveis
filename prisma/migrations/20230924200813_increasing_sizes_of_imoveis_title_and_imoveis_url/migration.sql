@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE `Imovel` MODIFY `title` MEDIUMTEXT NOT NULL,
+    MODIFY `url` MEDIUMTEXT NOT NULL;

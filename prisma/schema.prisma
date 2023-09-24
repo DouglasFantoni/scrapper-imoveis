@@ -24,10 +24,10 @@ model Post {
 
 model Imovel {
   id          String  @id @default(uuid())
-  title       String
-  slug        String
-  url         String  // Link do imovel
-  description String
+  title       String @db.MediumText
+  slug        String @db.MediumText
+  url         String @db.MediumText // Link do imovel
+  description String @db.LongText
   amount      Float // Valor do imovel
   websiteId  String
   website    Website @relation(fields: [websiteId], references: [id])

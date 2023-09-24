@@ -3,6 +3,7 @@ import cheerio from "cheerio";
 import { ImovelDataDto } from '../../endpoints/imoveis/ImovelDataDto';
 import { Website } from "../../graphql.schema";
 import { convertImovelType, convertToNumber } from '../convertionsToTypes';
+import { encrypt } from "../crypt";
 
 export  const leilaoimovel = async (websiteData: Website, pagina: string) => {
 
@@ -29,17 +30,19 @@ export  const leilaoimovel = async (websiteData: Website, pagina: string) => {
                     // As vezes existe um texto a consultar no valor
                     const imovelValue =  convertToNumber(amount);
 
+                    const slug = encrypt(`${title}${description}${amount}`);
+
                     if (imovelValue){
                         const imovelData: ImovelDataDto = {
-                            slug: url,
-                            title,
-                            amount: imovelValue,
-                            status,
-                            description,
-                            image,
-                            type: convertImovelType(title),
-                            url
-                        }
+													slug: slug,
+													title,
+													amount: imovelValue,
+													status,
+													description,
+													image,
+													type: convertImovelType(title),
+													url,
+												};
             
                         imoveisData.push(imovelData)
                     }

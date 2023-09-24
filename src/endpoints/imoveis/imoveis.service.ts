@@ -50,90 +50,95 @@ export class ImoveisService {
 
 		const TelegramObject = new TelegramMessager();
 
-		websites.map(async (website) => {
-			let delay = 1000; // Começando com meio segundo
+		await Promise.all(
+			websites.map(async (website) => {
+				let delay = 1000; // Começando com meio segundo
 
-			const imoveisScrapped = await scrappImoveis({
-				...website,
-				imoveis: [],
-			});
-			// console.log('imoveisScrapped',imoveisScrapped);
+				const imoveisScrapped = await scrappImoveis({
+					...website,
+					imoveis: [],
+				});
+				// console.log('imoveisScrapped',imoveisScrapped);
 
-			// Remove os imoveis indesejados
-			const imoveisSelecteds = imoveisScrapped.filter(
-				(imovel) => !imovel.type || imovel.type !== "Desconhecido"
-			);
+				// Remove os imoveis indesejados
+				const imoveisSelecteds = imoveisScrapped.filter(
+					(imovel) => !imovel.type || imovel.type !== "Desconhecido"
+				);
 
-			Promise.all(
-				imoveisSelecteds.map(async (imovelScrapped) => {
-					let imovelExists = website.imoveis.find(
-						(imovel) => imovel.slug === imovelScrapped.slug
-					);
-					let imovelSynced: Imovel;
-					// console.log('imovelExists',imovelExists);
+				await Promise.all(
+					imoveisSelecteds.map(async (imovelScrapped) => {
+						let imovelExists = website.imoveis.find(
+							(imovel) => imovel.slug === imovelScrapped.slug
+						);
+						let imovelSynced: Imovel;
+						// console.log('imovelExists',imovelExists);
 
-					try {
-						// é update
-						if (imovelExists) {
-							// Se teve alteração de valor ele é atualizado. Senão ele é ignorado
-							if (imovelExists.amount !== imovelScrapped.amount) {
-								imovelSynced = await this.prisma.imovel.update({
-									data: {
-										...imovelScrapped,
-									},
-									where: {
-										id: imovelExists.id,
-									},
+						try {
+							// é update
+							if (imovelExists) {
+								// Se teve alteração de valor ele é atualizado. Senão ele é ignorado
+								if (imovelExists.amount !== imovelScrapped.amount) {
+									imovelSynced = await this.prisma.imovel.update({
+										data: {
+											...imovelScrapped,
+										},
+										where: {
+											id: imovelExists.id,
+										},
+									});
+								}
+
+								// é criação
+							} else {
+								imovelSynced = await this.create({
+									...imovelScrapped,
+									websiteId: website.id,
 								});
 							}
-
-							// é criação
-						} else {
-							imovelSynced = await this.create({
-								...imovelScrapped,
-								websiteId: website.id,
-							});
+						} catch (error) {
+							console.log(
+								"Erro ao criar/atualizar o seguinte imovel: ",
+								website.name,
+								imovelExists || imovelScrapped
+							);
+							if (error instanceof PrismaClientKnownRequestError) {
+								// The .code property can be accessed in a type-safe manner
+								console.log("Com o seguinte erro TRATADO:");
+								console.log(error.message, error.stack);
+							}
+							console.log("Com o seguinte erro BRUTO:", error);
 						}
-					} catch (error) {
-						console.log(
-							"Erro ao criar/atualizar o seguinte imovel: ",
-							website.name,
-							imovelExists || imovelScrapped
-						);
-						if (error instanceof PrismaClientKnownRequestError) {
-							// The .code property can be accessed in a type-safe manner
-							console.log("Com o seguinte erro TRATADO:");
-							console.log(error.message, error.stack);
-						}
-						console.log("Com o seguinte erro BRUTO:", error);
-					}
 
-					// Se houve alguma alteração ou criação é enviado um aviso ao bot
-					if (imovelSynced) {
-						let retryCount = 0;
-						while (retryCount < MAX_RETRIES) {
-							try {
-								console.log(imovelText(imovelSynced, website.name));
+						// Se houve alguma alteração ou criação é enviado um aviso ao bot
+						if (imovelSynced) {
+							let retryCount = 0;
+							while (retryCount < MAX_RETRIES) {
+								try {
+									console.log(imovelText(imovelSynced, website.name));
 
-								await TelegramObject.sendMessage(
-									imovelText(imovelSynced, website.name)
-								);
-								console.log("ENVIOU");
+									await TelegramObject.sendMessage(
+										imovelText(imovelSynced, website.name)
+									);
+									console.log("ENVIOU");
 
-								break;
-							} catch (error) {
-								// if (error.message.contains('Too Many Requests') || error.response.statusMessage.contains('Too Many Requests')) {
-								await new Promise((res) => setTimeout(res, delay));
-								delay *= 2; // Dobra o tempo de espera para a próxima retentativa
-								retryCount++;
-								// } else {
-								console.log(error);
-								// }
+									break;
+								} catch (error) {
+									// if (error.message.contains('Too Many Requests') || error.response.statusMessage.contains('Too Many Requests')) {
+									await new Promise((res) => setTimeout(res, delay));
+									delay *= 2; // Dobra o tempo de espera para a próxima retentativa
+									retryCount++;
+									// } else {
+									// console.log(error);
+									console.log("MENSAGEM: ", error.response.body.description);
+									// }
+								}
 							}
 						}
-					}
-				})
-			);
-		});
+					})
+				);
+
+				return null;
+			})
+		);
 	}
 }
