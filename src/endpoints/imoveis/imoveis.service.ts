@@ -46,7 +46,7 @@ export class ImoveisService {
 			},
 		});
 
-		console.log(websites);
+		// console.log(websites);
 
 		const TelegramObject = new TelegramMessager();
 
