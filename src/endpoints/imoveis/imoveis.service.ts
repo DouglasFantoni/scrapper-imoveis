@@ -5,6 +5,7 @@ import { imovelText } from "src/helpers/text";
 import { MAX_RETRIES } from "../../constants/configs";
 import { PrismaService } from "../../prisma/prisma.service";
 import { Imovel, NewImovel } from "./../../graphql.schema";
+import { ImovelDataDto } from "./ImovelDataDto";
 import { ImovelWithWebsite } from "./imoveis.resolvers";
 import { scrappImoveis } from "./scrappImoveis";
 
@@ -35,7 +36,7 @@ export class ImoveisService {
 		});
 	}
 
-	async searchImoveis(): Promise<void> {
+	async searchImoveis(): Promise<ImovelDataDto[]> {
 		const websites = await this.prisma.website.findMany({
 			where: {
 				isActive: true,
@@ -45,6 +46,8 @@ export class ImoveisService {
 				pages: true,
 			},
 		});
+
+		const imoveisFinded: ImovelDataDto[] = [];
 
 		// console.log(websites);
 
@@ -78,6 +81,8 @@ export class ImoveisService {
 							if (imovelExists) {
 								// Se teve alteração de valor ele é atualizado. Senão ele é ignorado
 								if (imovelExists.amount !== imovelScrapped.amount) {
+									imoveisFinded.push(imovelScrapped);
+
 									imovelSynced = await this.prisma.imovel.update({
 										data: {
 											...imovelScrapped,
@@ -90,6 +95,7 @@ export class ImoveisService {
 
 								// é criação
 							} else {
+								imoveisFinded.push(imovelScrapped);
 								imovelSynced = await this.create({
 									...imovelScrapped,
 									websiteId: website.id,
@@ -136,9 +142,8 @@ export class ImoveisService {
 						}
 					})
 				);
-
-				return null;
 			})
 		);
+		return imoveisFinded;
 	}
 }

@@ -14,9 +14,9 @@ export default class TelegramMessager {
 
     public async sendMessage(sendMessage: string) {
 
-        return this.bot.sendMessage(Vars.TELEGRAM_BOT_CHATID, sendMessage,{parse_mode: 'HTML'})
-
-        
+        return this.bot.sendMessage(Vars.TELEGRAM_BOT_CHATID, sendMessage, {
+					parse_mode: "HTML",
+				});
     }
 
 

@@ -4,7 +4,7 @@ type Query {
 	imoveis: [Imovel!]!
 	websites: [Website!]!
 	pages: [Page!]!
-	find: String
+	find: [Imovel]!
 	removeAll: String
 	removeAllImoveis: String
 }
