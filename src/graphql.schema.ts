@@ -100,7 +100,7 @@ export abstract class IQuery {
 
     abstract pages(): Page[] | Promise<Page[]>;
 
-    abstract find(): Nullable<ImovelResponse>[] | Promise<Nullable<ImovelResponse>[]>;
+    abstract find(): Nullable<Nullable<ImovelResponse>[]> | Promise<Nullable<Nullable<ImovelResponse>[]>>;
 
     abstract removeAll(): Nullable<string> | Promise<Nullable<string>>;
 

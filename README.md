@@ -1,8 +1,10 @@
-### Prisma GraphQL schema first sample
+### Scrapper de imoveis em leilão
 
-This sample project uses sqlite as the relational database. To use a different database, check the [Prisma docs](https://www.prisma.io/docs/getting-started).
+Esse scrapper de imoveis de leilão busca imoveis nos sites Caixa, Lance Judicial, Leilão Imovel e Zuckerman. Os imoveis são salvos em um banco RDS na AWS.
 
-### Installation
+ O serviço roda toda terça, quinta, sexta e sábado pela manhã para buscar os imoveis e avisa o interessado no Telegram através de um Bot.
+
+### Instalação
 
 1. Install dependencies: `npm install`
 2. Generate TypeScript type definitions for the GraphQL schema: `npm run generate:typings`
@@ -41,3 +43,7 @@ Para criar uma nova migration (Versão do banco)
 ```
 npx prisma migration dev --name v1.0.0
 ```
+
+## Documentação das Tecnologias
+
+[Prisma ](https://www.prisma.io/docs/getting-started)
