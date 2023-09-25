@@ -1,34 +1,42 @@
-### Scrapper de imoveis em leilão
+## Scrapper de imoveis em leilão
 
 Esse scrapper de imoveis de leilão busca imoveis nos sites Caixa, Lance Judicial, Leilão Imovel e Zuckerman. Os imoveis são salvos em um banco RDS na AWS.
 
  O serviço roda toda terça, quinta, sexta e sábado pela manhã para buscar os imoveis e avisa o interessado no Telegram através de um Bot.
 
+Este é um projeto de hobbie apenas, não está otimizado ou utilizando as melhores práticas.
+
+
 ### Instalação
 
-1. Install dependencies: `npm install`
-2. Generate TypeScript type definitions for the GraphQL schema: `npm run generate:typings`
-3. Create sqlite database and create tables: `npx prisma db push`
-4. Start server: `npm run start:dev`
+1. Instale o serverless: `npm install -g serverless`
+1. Instale as dependencias: `npm install`
+2. Gere os tipos: `npm run generate:typings`
+3. Edite o arquivo env e crie o banco de dados: `npx prisma db push`
+4. inicie o servidor: `npm run dev`
 
-### Graphql Playground
+#### Graphql Playground
 
-When the application is running, you can go to [http://localhost:3000/graphql](http://localhost:3000/graphql) to access the GraphQL Playground.  See [here](https://docs.nestjs.com/graphql/quick-start#playground) for more.
+Após a aplicação estar rodando deve-se acessar [http://localhost:3000/graphql](http://localhost:3000/graphql).
 
+#### Deploy na AWS
 
-
-AWS CLI
-
-Referencia: https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html
-
+Configurar profile de deploy
+```bash
 aws configure list-profiles
 aws s3 ls --profile dev
+```
 
 Selecionar profile default: <br/>
+```bash
 export AWS_PROFILE=dev
-
+```
+Fazer deploy do banco de dados no Amazon RDS
+```bash
 aws cloudformation deploy --stack-name scrapper-imoveis-stack --template-file rdsdatabase.yaml
+```
 
+Referencia: https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html
 
 ## Comandos Prisma
 

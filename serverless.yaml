@@ -22,6 +22,7 @@ provider:
     subnetIds:
       - subnet-0ce68677dd0405115  
 
+
 functions:
   api:
     handler: dist/main.handler
@@ -31,18 +32,12 @@ functions:
           path: /
           method: ANY
           cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer  # Este é o ID do Autorizador criado no API Gateway
+
       - http:
           path: /{proxy+}
           method: ANY
           cors: true
-          authorizer:
-            type: COGNITO_USER_POOLS
-            authorizerId:
-              Ref: ApiGatewayAuthorizer  # Este é o ID do Autorizador criado no API Gateway
+          
 
   callerFindImoveis:
     handler: dist/main.callFindProperties
@@ -53,6 +48,9 @@ functions:
 custom:
   serverless-offline:
     httpPort: 3000
+  environments:
+    dev:
+    prod:
 
 # custom:
 #   # Enable warmup on all functions (only for production and staging)
