@@ -55,3 +55,4 @@ npx prisma migration dev --name v1.0.0
 ## Documentação das Tecnologias
 
 [Prisma ](https://www.prisma.io/docs/getting-started)
+[Cognito ](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-enable-cognito-user-pool.html)

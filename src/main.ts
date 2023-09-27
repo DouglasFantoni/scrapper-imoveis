@@ -4,7 +4,7 @@ import serverlessExpress from "@vendia/serverless-express";
 import { Context, Handler } from "aws-lambda";
 import express from "express";
 import { AppModule } from "./app.module";
-import { ImoveisService } from "./endpoints/imoveis/imoveis.service";
+import { ImoveisResolvers } from "./endpoints/imoveis/imoveis.resolvers";
 
 let cachedServer: Handler;
 
@@ -40,23 +40,23 @@ export const handler = async (event: any, context: Context, callback: any) => {
 export const callFindProperties = async () => {
 	try {
 		const app = await NestFactory.createApplicationContext(AppModule);
-		const myService = app.get(ImoveisService);
+		const myService = app.get(ImoveisResolvers);
 
-		const response = await myService.findAll();
+		const response = await myService.searchImoveis();
 		await app.close();
 
 		return {
 			statusCode: 200,
-			body: JSON.stringify({ message: response }),
+			body: { message: response },
 		};
 	} catch (error) {
 		return {
 			statusCode: 500,
-			body: JSON.stringify({
+			body: {
 				message: `Erro ao buscar os imoveis:  ${
 					error.message ?? "Erro desconhecido"
 				}`,
-			}),
+			},
 		};
 	}
 };
