@@ -19,8 +19,6 @@ export class PagesService{
 
   async create(page: NewPage): Promise<Page> {
 
-    console.log('page',page);
-    
     return this.prisma.page.create({
       data: {
         ...page

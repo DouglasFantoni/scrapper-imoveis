@@ -1,8 +1,9 @@
+import { InternalServerErrorException } from "@nestjs/common";
 import axios from "axios";
 import cheerio from "cheerio";
-import { ImovelDataDto } from '../../endpoints/imoveis/ImovelDataDto';
+import { ImovelDataDto } from "../../endpoints/imoveis/ImovelDataDto";
 import { Website } from "../../graphql.schema";
-import { convertImovelType, convertToNumber } from '../convertionsToTypes';
+import { convertImovelType, convertToNumber } from "../convertionsToTypes";
 import { encrypt } from "../crypt";
 
 export const zuckerman = async (websiteData: Website, pagina: string) => {
@@ -14,7 +15,6 @@ export const zuckerman = async (websiteData: Website, pagina: string) => {
 		.get(url)
 		.then((response) => {
 			const $ = cheerio.load(response.data);
-			// console.log(response.data)
 
 			const imoveis = $(".card-property.card_lotes_div");
 
@@ -69,8 +69,16 @@ export const zuckerman = async (websiteData: Website, pagina: string) => {
 			return imoveisData.length > 0 ? imoveisData : [null];
 		})
 		.catch((err) => {
-			console.log("url", url);
-			console.log(err);
-			return [];
+			throw new InternalServerErrorException(
+				{
+					websiteData,
+					pagina,
+					url,
+				},
+				{
+					description: "Erro ao pegar as informações do imovel",
+					cause: err,
+				}
+			);
 		});
 };

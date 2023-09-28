@@ -1,3 +1,4 @@
+import { InternalServerErrorException } from "@nestjs/common";
 import axios from "axios";
 import { load } from "cheerio";
 import * as https from "https";
@@ -39,7 +40,6 @@ export const caixa = async (websiteData: Website, pagina: string) => {
 		})
 		.then(async (response) => {
 			const $ = load(response.data);
-			// console.log(response.data);
 
 			const imoveis = $("input");
 
@@ -51,9 +51,6 @@ export const caixa = async (websiteData: Website, pagina: string) => {
 						? `||${$(this).val()}`
 						: `${$(this).val()}`;
 				}
-				//
-
-				// console.log('amount',amount)
 			});
 
 			await axios
@@ -102,8 +99,15 @@ export const caixa = async (websiteData: Website, pagina: string) => {
 			return imoveisData.length > 0 ? imoveisData : [null];
 		})
 		.catch((err) => {
-			console.log("url", url);
-			console.log(err);
-			return [];
+			throw new InternalServerErrorException(
+				{
+					websiteData,
+					pagina,
+				},
+				{
+					description: "Erro ao buscar o imovel",
+					cause: err,
+				}
+			);
 		});
 };

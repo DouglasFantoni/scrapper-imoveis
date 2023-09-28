@@ -1,5 +1,4 @@
-import { Injectable } from "@nestjs/common";
-import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import TelegramMessager from "src/helpers/TelegramMessager";
 import { imovelText } from "src/helpers/text";
 import { MAX_RETRIES } from "../../constants/configs";
@@ -49,8 +48,6 @@ export class ImoveisService {
 
 		const imoveisFinded: ImovelDataDto[] = [];
 
-		// console.log(websites);
-
 		const TelegramObject = new TelegramMessager();
 
 		await Promise.all(
@@ -61,7 +58,6 @@ export class ImoveisService {
 					...website,
 					imoveis: [],
 				});
-				// console.log('imoveisScrapped',imoveisScrapped);
 
 				// Remove os imoveis indesejados
 				const imoveisSelecteds = imoveisScrapped.filter(
@@ -74,7 +70,6 @@ export class ImoveisService {
 							(imovel) => imovel.slug === imovelScrapped.slug
 						);
 						let imovelSynced: Imovel;
-						// console.log('imovelExists',imovelExists);
 
 						try {
 							// é update
@@ -102,17 +97,12 @@ export class ImoveisService {
 								});
 							}
 						} catch (error) {
-							console.log(
-								"Erro ao criar/atualizar o seguinte imovel: ",
-								website.name,
-								imovelExists || imovelScrapped
+							throw new InternalServerErrorException(
+								imovelExists || imovelScrapped,
+								{
+									description: "Erro ao criar/atualizar o seguinte imovel",
+								}
 							);
-							if (error instanceof PrismaClientKnownRequestError) {
-								// The .code property can be accessed in a type-safe manner
-								console.log("Com o seguinte erro TRATADO:");
-								console.log(error.message, error.stack);
-							}
-							console.log("Com o seguinte erro BRUTO:", error);
 						}
 
 						// Se houve alguma alteração ou criação é enviado um aviso ao bot
@@ -120,23 +110,17 @@ export class ImoveisService {
 							let retryCount = 0;
 							while (retryCount < MAX_RETRIES) {
 								try {
-									console.log(imovelText(imovelSynced, website.name));
-
 									await TelegramObject.sendMessage(
 										imovelText(imovelSynced, website.name)
 									);
-									console.log("ENVIOU");
 
 									break;
 								} catch (error) {
 									// if (error.message.contains('Too Many Requests') || error.response.statusMessage.contains('Too Many Requests')) {
-									console.log("MENSAGEM: ", error.response.body.description);
+									// console.log("MENSAGEM: ", error.response.body.description);
 									await new Promise((res) => setTimeout(res, delay));
 									delay += 10000; // Aumenta em 10 segundos a espera retentativa
 									retryCount++;
-									// } else {
-									// console.log(error);
-									// }
 								}
 							}
 						}

@@ -17,7 +17,7 @@ export class PagesResolvers {
 
   @Mutation('createPage')
   async createPage(@Args('page') page: NewPage): Promise<Page>{
-    console.log('page',page);
+
     
     const createdPage =  this.pagesService.create(page)  
     pubSub.publish('pageCreated', {pageCreated: createdPage})

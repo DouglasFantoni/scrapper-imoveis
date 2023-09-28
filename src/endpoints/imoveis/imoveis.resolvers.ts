@@ -27,8 +27,6 @@ export class ImoveisResolvers {
 	async searchImoveis(): Promise<ImovelResponse[]> {
 		const imoveisData = await this.imoveisService.searchImoveis();
 
-		console.log("RESPOSTA ESPERADA", imoveisData);
-
 		return imoveisData;
 	}
 

@@ -1,8 +1,9 @@
+import { InternalServerErrorException } from "@nestjs/common";
 import axios from "axios";
 import cheerio from "cheerio";
-import { ImovelDataDto } from '../../endpoints/imoveis/ImovelDataDto';
+import { ImovelDataDto } from "../../endpoints/imoveis/ImovelDataDto";
 import { Website } from "../../graphql.schema";
-import { convertImovelType, convertToNumber } from '../convertionsToTypes';
+import { convertImovelType, convertToNumber } from "../convertionsToTypes";
 import { encrypt } from "../crypt";
 
 export const lancejudicial = async (
@@ -16,7 +17,7 @@ export const lancejudicial = async (
 	try {
 		const response = await axios.get(url);
 		const $ = cheerio.load(response.data);
-		// console.log(response.data)
+
 		const imoveis = $(".card-item");
 
 		try {
@@ -53,13 +54,30 @@ export const lancejudicial = async (
 				imoveisData.push(imovelData);
 			});
 		} catch (error) {
-			console.log("ERRO AO PEGAR AS INFORMAÇÕES DO IMOVEL", error);
+			throw new InternalServerErrorException(
+				{
+					websiteData,
+					pagina,
+					url,
+				},
+				{
+					description: "Erro ao pegar as informações do imovel",
+					cause: error,
+				}
+			);
 		}
 		return imoveisData.length > 0 ? imoveisData : [];
 	} catch (err) {
-		console.log("url", url);
-		console.log(err);
+		throw new InternalServerErrorException(
+			{
+				websiteData,
+				pagina,
+				url,
+			},
+			{
+				description: "Erro ao pegar as informações do imovel",
+				cause: err,
+			}
+		);
 	}
-
-	return [];
 };
