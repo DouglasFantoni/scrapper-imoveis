@@ -15,7 +15,8 @@ const imovelOptionalDataText = (imovelData: Imovel): string => {
 		(str += ` <b>Status:</b> ${imovelData.status}
 `);
 	imovelData.description &&
-		(str += `<b>${imovelData.description}</b>
+		(str += `
+${imovelData.description}
 `);
 
 	return str;

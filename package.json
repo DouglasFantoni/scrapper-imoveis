@@ -1,7 +1,7 @@
 {
-	"name": "nest-typescript-starter",
+	"name": "scrapper-imoveis",
 	"version": "1.0.0",
-	"description": "Nest TypeScript starter repository",
+	"description": "Scrapper de imoveis em leilão",
 	"license": "MIT",
 	"prisma": {
 		"seed": "ts-node --transpile-only --compiler-options {\"resolveJsonModule\":true} prisma/seed.ts"

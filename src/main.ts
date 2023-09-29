@@ -1,3 +1,4 @@
+import { InternalServerErrorException } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { ExpressAdapter } from "@nestjs/platform-express";
 import serverlessExpress from "@vendia/serverless-express";
@@ -45,16 +46,11 @@ export const callFindProperties = async () => {
 
 		return {
 			statusCode: 200,
-			body: { message: response },
+			body: { data: response },
 		};
 	} catch (error) {
-		return {
-			statusCode: 500,
-			body: {
-				message: `Erro ao buscar os imoveis:  ${
-					error.message ?? "Erro desconhecido"
-				}`,
-			},
-		};
+		throw new InternalServerErrorException(error, {
+			description: "Erro ao buscar os imoveis",
+		});
 	}
 };
