@@ -3,7 +3,7 @@ frameworkVersion: '3'
 
 plugins:
   # - '@hewmen/serverless-plugin-typescript'  
-  - serverless-jetpack
+  # - serverless-jetpack
   - serverless-offline
 
 
