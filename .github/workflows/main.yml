@@ -23,7 +23,7 @@ jobs:
       run: npm run build
 
     - name: Deploy to AWS Lambda with Serverless
-      run: npx serverless deploy
+      run: npx serverless deploy --stage prod
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

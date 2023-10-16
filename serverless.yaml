@@ -32,7 +32,6 @@ functions:
           path: /
           method: ANY
           cors: true
-
       - http:
           path: /{proxy+}
           method: ANY
@@ -48,6 +47,7 @@ functions:
 custom:
   serverless-offline:
     httpPort: 3000
+    
   environments:
     dev:
     prod:
