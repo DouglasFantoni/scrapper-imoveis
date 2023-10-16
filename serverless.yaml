@@ -15,6 +15,11 @@ provider:
   runtime: nodejs18.x
   region: us-east-1 # or whatever your region is
   stage: ${opt:stage, 'dev'}
+  environment:
+    DATABASE_URL: ${env:DATABASE_URL}
+    PRIVATE_KEY: ${env:PRIVATE_KEY}
+    TELEGRAM_BOT_TOKEN: ${env:TELEGRAM_BOT_TOKEN}
+    TELEGRAM_BOT_CHATID: ${env:TELEGRAM_BOT_CHATID}
   memorySize: 128
   vpc:
     securityGroupIds:
